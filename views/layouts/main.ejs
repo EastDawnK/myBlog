@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.title %></title>
+  <meta name="description" content="기업 실적 발표가 관련 기업에 미치는 영향을 기록하는 분석 블로그">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <a href="/" class="header-logo">실적 발표 영향 분석</a>
+
+      <nav class="header-nav">
+        <a href="/">홈</a>
+        <a href="/posts">분석글</a>
+        <a href="/about">소개</a>
+        <% if (currentUser) { %>
+          <a href="/admin">Admin</a>
+          <a href="/admin/companies">Companies</a>
+        <% } %>
+      </nav>
+
+      <div class="header-actions">
+        <% if (currentUser) { %>
+          <form action="/admin/logout" method="POST">
+            <button type="submit" class="link-button">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/admin/login" class="button button-small">Admin Login</a>
+        <% } %>
+      </div>
+    </header>
+
+    <main class="main">
+      <% if (!databaseConnected) { %>
+        <div class="notice">
+          로컬 MongoDB 연결 전 상태입니다. 공개 화면은 샘플 데이터로 미리보기됩니다.
+        </div>
+      <% } %>
+      <%- body %>
+    </main>
+  </div>
+</body>
+</html>

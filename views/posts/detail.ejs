@@ -1,0 +1,87 @@
+<article class="detail">
+  <p class="eyebrow"><%= post.eventType %></p>
+  <h1><%= post.title %></h1>
+  <p class="meta">
+    실적 발표 기업: <%= post.influencing_company %>
+    <% if (post.influencing_ticker) { %>
+      (<%= post.influencing_ticker %>)
+    <% } %>
+    <% if (post.eventDate) { %>
+      · <%= new Date(post.eventDate).toLocaleDateString("ko-KR") %>
+    <% } %>
+  </p>
+
+  <div class="summary-grid">
+    <div>
+      <span>이벤트 영향도</span>
+      <strong><%= post.influencing_score %></strong>
+      <p>실적 발표 기업 기준</p>
+    </div>
+    <div>
+      <span>Earning Date (US)</span>
+      <strong><%= (post.earningDateUS || post.earningDate) ? new Date(post.earningDateUS || post.earningDate).toLocaleDateString("ko-KR") : "-" %></strong>
+      <p>미국 날짜 기준</p>
+    </div>
+    <div>
+      <span>Earning Date (Korea)</span>
+      <strong><%= post.earningDateKR ? new Date(post.earningDateKR).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true }) : "-" %></strong>
+      <p>한국 시간 기준</p>
+    </div>
+    <div>
+      <span>Earning Whisper</span>
+      <strong><%= post.earningWhisper || "-" %></strong>
+      <p>시장 기대치</p>
+    </div>
+    <div>
+      <span>Consensus</span>
+      <strong><%= post.consensus || "-" %></strong>
+      <p>컨센서스</p>
+    </div>
+    <div>
+      <span>Revenue</span>
+      <strong><%= post.revenue || "-" %></strong>
+      <p>매출</p>
+    </div>
+    <% post.affected_companies.forEach((company) => { %>
+      <div>
+        <span><%= company.affected_company %></span>
+        <strong><%= company.impact_score %></strong>
+        <p><%= company.strategy || "전략 미입력" %></p>
+      </div>
+    <% }) %>
+  </div>
+
+  <section class="content-section">
+    <h2>본문 분석</h2>
+    <p class="body-text"><%= post.body %></p>
+  </section>
+
+  <section class="content-section">
+    <h2>영향을 받는 기업별 대응</h2>
+    <% post.affected_companies.forEach((company) => { %>
+      <div class="impact-row">
+        <strong><%= company.affected_company %></strong>
+        <span><%= company.strategy || "전략 미입력" %></span>
+        <p><%= company.comment || "코멘트가 없습니다." %></p>
+      </div>
+    <% }) %>
+  </section>
+
+  <section class="content-section">
+    <h2>세부 코멘트</h2>
+    <dl class="comment-list">
+      <dt>HBM</dt>
+      <dd><%= post.hbmComment || "미입력" %></dd>
+      <dt>DRAM</dt>
+      <dd><%= post.dramComment || "미입력" %></dd>
+      <dt>NAND</dt>
+      <dd><%= post.nandComment || "미입력" %></dd>
+      <dt>Guidance</dt>
+      <dd><%= post.guidanceComment || "미입력" %></dd>
+    </dl>
+  </section>
+
+  <% if (post.sourceUrl) { %>
+    <p><a href="<%= post.sourceUrl %>" target="_blank" rel="noreferrer">참고 링크</a></p>
+  <% } %>
+</article>

@@ -1,0 +1,47 @@
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Admin</p>
+    <h1>기업 관리</h1>
+  </div>
+  <a href="/admin" class="button button-secondary">대시보드</a>
+</section>
+
+<form action="/admin/companies" method="POST" class="form company-form">
+  <div class="form-grid">
+    <label>
+      기업명
+      <input type="text" name="name" required placeholder="ex) Micron Technology">
+    </label>
+    <label>
+      티커
+      <input type="text" name="ticker" required placeholder="ex) MU">
+    </label>
+    <label>
+      시장
+      <input type="text" name="market" required placeholder="ex) NASDAQ">
+    </label>
+    <label>
+      섹터
+      <input type="text" name="sector" placeholder="ex) Memory Semiconductor">
+    </label>
+  </div>
+  <label>
+    메모
+    <input type="text" name="memo" placeholder="ex) 실적 발표가 관련 기업에 주는 영향 분석 기준">
+  </label>
+  <button type="submit" class="button">기업 추가</button>
+</form>
+
+<div class="table-list">
+  <% companies.forEach((company) => { %>
+    <div class="table-row">
+      <div>
+        <strong><%= company.name %></strong>
+        <p><%= company.ticker %> · <%= company.market %> · <%= company.sector || "섹터 미입력" %></p>
+      </div>
+      <form action="/admin/companies/<%= company._id %>/delete" method="POST">
+        <button type="submit" class="danger-button">삭제</button>
+      </form>
+    </div>
+  <% }) %>
+</div>

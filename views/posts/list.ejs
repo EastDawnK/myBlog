@@ -1,0 +1,43 @@
+<section class="page-title">
+  <p class="eyebrow">Analysis</p>
+  <h1>실적 발표 영향 분석글</h1>
+  <p>실적 발표 기업과 영향을 받는 관련 기업을 분리해 이벤트별 투자 판단 근거를 기록합니다.</p>
+</section>
+
+<% if (posts.length === 0) { %>
+  <p class="empty">등록된 분석글이 없습니다.</p>
+<% } %>
+
+<div class="post-list">
+  <% posts.forEach((post) => { %>
+    <article class="post-card">
+      <div class="post-card-main">
+        <p class="meta">
+          <%= post.eventType %> · 실적 발표 기업: <%= post.influencing_company %>
+          <% if (post.eventDate) { %>
+            · <%= new Date(post.eventDate).toLocaleDateString("ko-KR") %>
+          <% } %>
+        </p>
+        <h2><a href="/posts/<%= post._id %>"><%= post.title %></a></h2>
+        <p><%= post.summary || "요약이 없습니다." %></p>
+        <p class="earnings-meta">
+          US:
+          <%= (post.earningDateUS || post.earningDate) ? new Date(post.earningDateUS || post.earningDate).toLocaleDateString("ko-KR") : "미입력" %>
+          · KR:
+          <%= post.earningDateKR ? new Date(post.earningDateKR).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true }) : "미입력" %>
+          · Consensus: <%= post.consensus || "미입력" %>
+          · Revenue: <%= post.revenue || "미입력" %>
+        </p>
+        <div class="tags">
+          <% post.affected_companies.forEach((company) => { %>
+            <span><%= company.affected_company %> 영향 <%= company.impact_score %></span>
+          <% }) %>
+        </div>
+      </div>
+      <div class="score-panel">
+        <span>이벤트 점수</span>
+        <strong><%= post.influencing_score %></strong>
+      </div>
+    </article>
+  <% }) %>
+</div>

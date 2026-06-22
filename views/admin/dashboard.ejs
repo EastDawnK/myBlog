@@ -1,0 +1,32 @@
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Admin</p>
+    <h1>관리자 대시보드</h1>
+  </div>
+  <div class="button-group">
+    <a href="/admin/companies" class="button button-secondary">기업 관리</a>
+    <a href="/admin/posts/new" class="button">새 분석글</a>
+  </div>
+</section>
+
+<% if (posts.length === 0) { %>
+  <p class="empty">아직 작성된 분석글이 없습니다.</p>
+<% } %>
+
+<div class="table-list">
+  <% posts.forEach((post) => { %>
+    <div class="table-row">
+      <div>
+        <strong><%= post.title %></strong>
+        <p><%= post.influencing_company %> · <%= post.eventType %></p>
+      </div>
+      <div class="row-actions">
+        <a href="/posts/<%= post._id %>">보기</a>
+        <a href="/admin/posts/<%= post._id %>/edit">수정</a>
+        <form action="/admin/posts/<%= post._id %>/delete" method="POST">
+          <button type="submit" class="danger-button">삭제</button>
+        </form>
+      </div>
+    </div>
+  <% }) %>
+</div>

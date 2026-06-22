@@ -1,0 +1,62 @@
+<section class="hero">
+  <div>
+    <p class="eyebrow">Earnings Impact Analysis Blog</p>
+    <h1>실적 발표 기업이 관련 기업에 주는 영향을 기록합니다.</h1>
+    <p>
+      특정 기업의 실적 발표, 가이던스, 업황 코멘트가 다른 기업에 어떤 영향을 주는지 분석글로 남기고, 기업별 영향 점수와 대응 전략을 관리하는 MongoDB 기반 블로그입니다.
+    </p>
+  </div>
+  <a href="/posts" class="button">분석글 보기</a>
+</section>
+
+<section class="flow-section">
+  <div class="flow-card source">
+    <span>실적 발표 기업</span>
+    <strong>이벤트 발생 기업</strong>
+    <p>실적 발표, 가이던스, 업황 코멘트</p>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-card target">
+    <span>영향을 받는 기업</span>
+    <strong>관련 기업들</strong>
+    <p>영향 점수, 투자 대응 전략, 기업별 코멘트</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <h2>최근 분석글</h2>
+    <% if (currentUser) { %>
+      <a href="/admin/posts/new" class="button button-small">새 분석글</a>
+    <% } %>
+  </div>
+
+  <% if (posts.length === 0) { %>
+    <p class="empty">아직 등록된 분석글이 없습니다.</p>
+  <% } %>
+
+  <div class="post-list">
+    <% posts.forEach((post) => { %>
+      <article class="post-card">
+        <div class="post-card-main">
+          <p class="meta">
+            <%= post.eventType %> · 실적 발표 기업: <%= post.influencing_company %>
+          </p>
+          <h3><a href="/posts/<%= post._id %>"><%= post.title %></a></h3>
+          <p><%= post.summary || "요약이 없습니다." %></p>
+          <p class="earnings-meta">
+            US:
+            <%= (post.earningDateUS || post.earningDate) ? new Date(post.earningDateUS || post.earningDate).toLocaleDateString("ko-KR") : "미입력" %>
+            · KR:
+            <%= post.earningDateKR ? new Date(post.earningDateKR).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true }) : "미입력" %>
+            · Revenue: <%= post.revenue || "미입력" %>
+          </p>
+        </div>
+        <div class="score-panel">
+          <span>영향도</span>
+          <strong><%= post.influencing_score %></strong>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</section>

@@ -1,0 +1,128 @@
+<section class="page-title">
+  <p class="eyebrow">Admin</p>
+  <h1><%= formTitle %></h1>
+</section>
+
+<form action="<%= action %>" method="POST" class="form wide-form">
+  <label>
+    제목
+    <input type="text" name="title" value="<%= post ? post.title : '' %>" required>
+  </label>
+
+  <label>
+    요약
+    <input type="text" name="summary" value="<%= post ? post.summary : '' %>">
+  </label>
+
+  <div class="form-grid">
+    <label>
+      실적 발표 기업
+      <input list="company-options" type="text" name="influencing_company" value="<%= post ? post.influencing_company : '' %>" required>
+    </label>
+    <label>
+      티커
+      <input type="text" name="influencing_ticker" value="<%= post ? post.influencing_ticker : '' %>">
+    </label>
+    <label>
+      이벤트 유형
+      <input type="text" name="eventType" value="<%= post ? post.eventType : 'Earnings' %>" required>
+    </label>
+    <label>
+      이벤트 날짜
+      <input type="date" name="eventDate" value="<%= post && post.eventDate ? new Date(post.eventDate).toISOString().slice(0, 10) : '' %>">
+    </label>
+    <label>
+      Earning Date (US)
+      <input type="date" name="earningDateUS" value="<%= post && (post.earningDateUS || post.earningDate) ? new Date(post.earningDateUS || post.earningDate).toISOString().slice(0, 10) : '' %>">
+    </label>
+    <label>
+      Earning Date (Korea)
+      <input type="datetime-local" name="earningDateKR" value="<%= post && post.earningDateKR ? new Date(post.earningDateKR).toLocaleString('sv-SE', { timeZone: 'Asia/Seoul', hour12: false }).replace(' ', 'T').slice(0, 16) : '' %>">
+    </label>
+    <label>
+      Earning Whisper
+      <input type="text" name="earningWhisper" value="<%= post ? post.earningWhisper || '' : '' %>" placeholder="ex) EPS 1.85">
+    </label>
+    <label>
+      Consensus
+      <input type="text" name="consensus" value="<%= post ? post.consensus || '' : '' %>" placeholder="ex) EPS 1.72">
+    </label>
+    <label>
+      Revenue
+      <input type="text" name="revenue" value="<%= post ? post.revenue || '' : '' %>" placeholder="ex) $8.9B">
+    </label>
+    <label>
+      이벤트 영향도
+      <input type="number" name="influencing_score" min="0" max="100" value="<%= post ? post.influencing_score : 50 %>">
+    </label>
+  </div>
+
+  <datalist id="company-options">
+    <% companies.forEach((company) => { %>
+      <option value="<%= company.name %>"><%= company.ticker %></option>
+    <% }) %>
+  </datalist>
+
+  <fieldset>
+    <legend>영향을 받는 관련 기업</legend>
+    <% for (let i = 0; i < 3; i++) { %>
+      <% const affected = post && post.affected_companies ? post.affected_companies[i] : null; %>
+      <div class="affected-grid">
+        <label>
+          기업명
+          <input list="company-options" type="text" name="affected_company" value="<%= affected ? affected.affected_company : '' %>">
+        </label>
+        <label>
+          티커
+          <input type="text" name="affected_ticker" value="<%= affected ? affected.affected_ticker : '' %>">
+        </label>
+        <label>
+          영향 점수
+          <input type="number" name="impact_score" min="0" max="100" value="<%= affected ? affected.impact_score : 50 %>">
+        </label>
+        <label>
+          대응 전략
+          <input type="text" name="strategy" value="<%= affected ? affected.strategy : '' %>" placeholder="관망, 보유, 비중축소">
+        </label>
+        <label class="full">
+          코멘트
+          <input type="text" name="comment" value="<%= affected ? affected.comment : '' %>">
+        </label>
+      </div>
+    <% } %>
+  </fieldset>
+
+  <label>
+    본문 분석
+    <textarea name="body" rows="8" required><%= post ? post.body : '' %></textarea>
+  </label>
+
+  <div class="form-grid">
+    <label>
+      HBM 코멘트
+      <textarea name="hbmComment" rows="3"><%= post ? post.hbmComment : '' %></textarea>
+    </label>
+    <label>
+      DRAM 코멘트
+      <textarea name="dramComment" rows="3"><%= post ? post.dramComment : '' %></textarea>
+    </label>
+    <label>
+      NAND 코멘트
+      <textarea name="nandComment" rows="3"><%= post ? post.nandComment : '' %></textarea>
+    </label>
+    <label>
+      Guidance 코멘트
+      <textarea name="guidanceComment" rows="3"><%= post ? post.guidanceComment : '' %></textarea>
+    </label>
+  </div>
+
+  <label>
+    참고 링크
+    <input type="url" name="sourceUrl" value="<%= post ? post.sourceUrl : '' %>">
+  </label>
+
+  <div class="button-group">
+    <button type="submit" class="button">저장</button>
+    <a href="/admin" class="button button-secondary">취소</a>
+  </div>
+</form>
